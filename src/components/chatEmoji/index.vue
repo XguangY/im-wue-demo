@@ -1,40 +1,45 @@
 <template>
   <span>
-    <el-popover ref="popover5" placement="top-start" width="360" v-model="showModal">
+    <el-popover ref="popover5" v-model="showModal" placement="top-start" width="360">
       <img
         v-for="(v,i) in emojiList"
-        :src="require(`../../../static/faces/${v}`)"
         :key="i"
-        @click="selectEmoji(i)"
+        :src="require(`../../../static/faces/${v}`)"
         class="img-style"
-      />
+        @click="selectEmoji(i)"
+      >
     </el-popover>
-    <van-icon name="smile-o" size="20" color="rgba(0, 0, 0, 0.65)" v-popover:popover5 />
+    <van-icon v-popover:popover5 name="smile-o" size="20" color="rgba(0, 0, 0, 0.65)" />
   </span>
 </template>
 
 <script>
-import emoji from "../../config/emoji";
+import emoji from '../../config/emoji'
 
 export default {
+  props: {
+    inpMessage: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    }
+  },
   data() {
     return {
       emojiList: emoji.obj,
-      currentEmoji: "",
+      currentEmoji: '',
       showModal: false
-    };
+    }
   },
   methods: {
     selectEmoji(e) {
-      let value = (this.inpMessage || "") + e;
-      this.$data.showModal = false;
-      this.$emit("selectEmoji", value);
+      const value = (this.inpMessage || '') + e
+      this.$data.showModal = false
+      this.$emit('selectEmoji', value)
     }
-  },
-  props: {
-    inpMessage: String
   }
-};
+}
 </script>
 <style scoped>
 .img-style {

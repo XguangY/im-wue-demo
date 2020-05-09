@@ -8,11 +8,11 @@
   </el-dialog>-->
   <a-modal
     title="申请入群"
-    :visible="this.isShowGroupReques.isShow"
+    :visible="isShowGroupReques.isShow"
     :footer="null"
     style="text-align:center"
   >
-    <p>{{this.$store.state.group.groupNotifications.from}}申请入群:{{this.$store.state.group.groupNotifications.gid}}</p>
+    <p>{{ this.$store.state.group.groupNotifications.from }}申请入群:{{ this.$store.state.group.groupNotifications.gid }}</p>
     <div class="btn">
       <el-button @click="RejectJoinGroup">拒绝</el-button>
       <el-button type="primary" @click="AgreeJoinGroup">同意</el-button>
@@ -20,40 +20,40 @@
   </a-modal>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
       showGroupRequestModel: this.$store.state.group.groupNotifications.isShow
-    };
+    }
   },
   computed: {
     isShowGroupReques() {
-      return this.$store.state.group.groupNotifications;
+      return this.$store.state.group.groupNotifications
     }
   },
   methods: {
-    ...mapActions(["onAgreeJoinGroup", "onRejectJoinGroup"]),
+    ...mapActions(['onAgreeJoinGroup', 'onRejectJoinGroup']),
     changeGroupRequestModal() {
       this.$store.state.group.groupNotifications.isShow = !this.$store.state
-        .group.groupNotifications.isShow;
+        .group.groupNotifications.isShow
     },
     AgreeJoinGroup() {
       this.onAgreeJoinGroup({
         joinName: this.$store.state.group.groupNotifications.from,
         joinGroupId: this.$store.state.group.groupNotifications.gid
-      });
-      this.changeGroupRequestModal();
+      })
+      this.changeGroupRequestModal()
     },
     RejectJoinGroup() {
       this.onRejectJoinGroup({
         joinName: this.$store.state.group.groupNotifications.from,
         joinGroupId: this.$store.state.group.groupNotifications.gid
-      });
-      this.changeGroupRequestModal();
+      })
+      this.changeGroupRequestModal()
     }
   }
-};
+}
 </script>
 <style scoped>
 p {
@@ -63,4 +63,4 @@ p {
   margin-top: 20px;
 }
 </style>>
-    
+

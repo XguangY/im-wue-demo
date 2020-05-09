@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-popover
+      v-model="showGroupSetting"
       placement="bottom"
       width="60"
       trigger="click"
-      v-model="showGroupSetting"
       @hide="changeSetModel"
     >
-      <div class="setting" v-show="setInfo">
+      <div v-show="setInfo" class="setting">
         <ul class="setting">
           <li @click="openInvite">
             <i class="el-icon-user">邀请群成员</i>
@@ -25,70 +25,73 @@
       </div>
 
       <van-icon
+        slot="reference"
         name="setting-o"
         size="16"
-        slot="reference"
-        @click="changeSetInfo"
         class="set-icon"
+        @click="changeSetInfo"
       />
     </el-popover>
     <GroupBlack ref="groupBlackModel" />
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import "./group.less";
-import GroupBlack from "./groupBlack.vue";
+import { mapActions } from 'vuex'
+import './group.less'
+import GroupBlack from './groupBlack.vue'
 export default {
+  components: {
+    GroupBlack
+  },
   data() {
     return {
       showGroupSetting: false,
       setInfo: false,
       showAdminIcon: false,
       showCloseIcon: false
-    };
+    }
   },
   computed: {
     loginName() {
       const username =
-        localStorage.getItem("userInfo") &&
-        JSON.parse(localStorage.getItem("userInfo")).userId;
-      return username;
+        localStorage.getItem('userInfo') &&
+        JSON.parse(localStorage.getItem('userInfo')).userId
+      return username
     },
     groupAdmin() {
-      return this.$store.state.group.groupInfo.admin;
+      return this.$store.state.group.groupInfo.admin
     }
   },
   methods: {
     ...mapActions([
-      "onInviteGroup",
-      "onUpdataGroupInfo",
-      "onGetGroupBlack",
-      "onDissolveGroup",
-      "onQuitGroup"
+      'onInviteGroup',
+      'onUpdataGroupInfo',
+      'onGetGroupBlack',
+      'onDissolveGroup',
+      'onQuitGroup'
     ]),
     changeSettingModel() {
-      this.$data.showGroupSetting = !this.$data.showGroupSetting;
+      this.$data.showGroupSetting = !this.$data.showGroupSetting
     },
     changeSetInfo() {
-      this.$data.setInfo = !this.$data.setInfo;
-      if (this.loginName == this.groupAdmin) {
-        this.$data.showAdminIcon = !this.$data.showAdminIcon;
+      this.$data.setInfo = !this.$data.setInfo
+      if (this.loginName === this.groupAdmin) {
+        this.$data.showAdminIcon = !this.$data.showAdminIcon
       } else {
-        this.$data.showCloseIcon = !this.$data.showCloseIcon;
+        this.$data.showCloseIcon = !this.$data.showCloseIcon
       }
     },
     changeBlackModel() {
       this.onGetGroupBlack({
         select_id: this.$store.state.group.groupInfo.gid
-      });
-      this.$refs.groupBlackModel.chengeBlackModel();
+      })
+      this.$refs.groupBlackModel.chengeBlackModel()
     },
     openInvite() {
-      this.$prompt("邀请群成员", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPlaceholder: "用户名"
+      this.$prompt('邀请群成员', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '用户名'
       })
         .then(({ value }) => {
           this.onInviteGroup({
@@ -96,62 +99,57 @@ export default {
             select_name: value
           })
         })
-        ["catch"](() => {});
     },
     updatedGroupInfo() {
-      this.$prompt("群组名", "修改群信息", {
-        confirmButtonText: "修改",
-        cancelButtonText: "取消"
+      this.$prompt('群组名', '修改群信息', {
+        confirmButtonText: '修改',
+        cancelButtonText: '取消'
       })
         .then(({ value }) => {
           this.onUpdataGroupInfo({
             select_id: this.$store.state.group.groupInfo.gid,
             updateName: value,
             updateDesc: this.$store.state.group.groupInfo.desc
-          }),
-            this.$message({
-              type: "success",
-              message: "修改成功"
-            });
+          })
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
         })
-        ["catch"](() => {});
     },
     quitGroup() {
       this.onQuitGroup({
         select_id: this.$store.state.group.groupInfo.gid,
         callback: () => {
-          this.closeModa();
+          this.closeModa()
         }
-      });
+      })
     },
     dissolution() {
       this.onDissolveGroup({
         select_id: this.$store.state.group.groupInfo.gid,
         callback: () => {
-          this.closeModa();
+          this.closeModa()
         }
-      });
+      })
     },
     closeModa() {
       // 退出群组 or 解散群组 关闭弹窗
-      this.$data.showGroupSetting = false;
-      this.changeSetInfo();
-      this.$emit("closeGroupSet");
-      Vue.$router.push("/group");
+      this.$data.showGroupSetting = false
+      this.changeSetInfo()
+      this.$emit('closeGroupSet')
+      this.$router.push('/group')
     },
     changeSetModel() {
-      this.$data.setInfo = false;
-      if (this.loginName == this.groupAdmin) {
-        this.$data.showAdminIcon = false;
+      this.$data.setInfo = false
+      if (this.loginName === this.groupAdmin) {
+        this.$data.showAdminIcon = false
       } else {
-        this.$data.showCloseIcon = false;
+        this.$data.showCloseIcon = false
       }
     }
-  },
-  components: {
-    GroupBlack
   }
-};
+}
 </script>
 <style scoped>
 .set .dialog {
