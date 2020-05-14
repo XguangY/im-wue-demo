@@ -180,7 +180,7 @@ export default {
     RecordAudio
   },
   props: [
-    'type', // 聊天类型 contact, group, chatroom
+    'type', // 聊天类型 contact, group, chatroom, anonymity
     'username', // 选中的聊天对象
     'broken', // 是否适应移动端
     'showUserList',
@@ -191,7 +191,8 @@ export default {
       activedKey: {
         contact: '',
         group: '',
-        chatroom: ''
+        chatroom: '',
+        anonymity: '' // 新增匿名聊天的记录
       },
       message: '',
       isHttps: window.location.protocol === 'https:',
@@ -207,6 +208,7 @@ export default {
   computed: {
     ...mapGetters({
       contact: 'onGetContactUserList',
+      anonymity: 'onGetAnonymityUserList', // 新增匿名getter
       group: 'onGetGroupUserList',
       chatroom: 'onGetChatroomUserList',
       msgList: 'onGetCurrentChatObjMsg'
@@ -229,6 +231,9 @@ export default {
       this.onGetGroupUserList()
     } else if (this.type === 'chatroom') {
       this.onGetChatroomUserList()
+    } else if (this.type === 'anonymity') {
+      // 新增匿名项
+      this.onGetAnonymityUserList()
     }
   },
   updated() {
@@ -238,6 +243,7 @@ export default {
   methods: {
     ...mapActions([
       'onGetContactUserList',
+      'onGetAnonymityUserList', // 新增匿名action
       'onGetGroupUserList',
       'onGetChatroomUserList',
       'onGetCurrentChatObjMsg',
@@ -263,6 +269,10 @@ export default {
           break
         case 'chatroom':
           key = item.id
+          break
+        // 暂时使用好友聊天的逻辑
+        case 'anonymity':
+          key = item.name
           break
         default:
           break
@@ -315,6 +325,20 @@ export default {
         if (!this.msgList) {
           this.getHistoryMessage({ name: key.name, isGroup: false })
         }
+      } else if (this.type === 'anonymity') { // 暂时使用好友逻辑
+        this.$router.push({ name: this.type, params: { id: key.name }})
+        this.onGetCurrentChatObjMsg({ type: this.type, id: key.name })
+        setTimeout(() => {
+          me.$store.commit('updateMessageStatus', {
+            action: 'oneUserReadMsgs',
+            readUser: key.name
+          })
+          this.$forceUpdate()
+        }, 100)
+
+        if (!this.msgList) {
+          this.getHistoryMessage({ name: key.name, isGroup: false })
+        }
       } else if (this.type === 'chatroom') {
         const me = this
         // me.roomId = key.id
@@ -354,6 +378,8 @@ export default {
       } else if (this.type === 'chatroom') {
         name = this.$data.activedKey[this.type].id
         isGroup = true
+      } else if (this.type === 'anonymity') { // 暂时使用好友逻辑
+        name = this.$data.activedKey[this.type].name
       }
       this.getHistoryMessage({
         name,
@@ -530,6 +556,8 @@ export default {
         name = this.$data.activedKey[this.type].groupid
       } else if (this.type === 'chatroom') {
         name = this.$data.activedKey[this.type].id
+      } else if (this.type === 'anonymity') { // 暂时使用好友逻辑 撤回消息这么写会有问题
+        name = this.$data.activedKey[this.type].name
       }
       this.recallMessage({ to: name, message: item })
     },

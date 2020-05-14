@@ -26,7 +26,7 @@ import moment from 'moment'
 
 export default {
   props: [
-    'type', // 聊天类型 contact, group, chatroom
+    'type', // 聊天类型 contact, group, chatroom, anonymity
     'username', // 选中的聊天对象
     'select'
   ],
@@ -35,7 +35,8 @@ export default {
       activedKey: {
         contact: '',
         group: '',
-        chatroom: ''
+        chatroom: '',
+        anonymity: '' // 新增你匿名项
       },
       showFirendMenus: false,
       firendMenus: [
@@ -66,6 +67,7 @@ export default {
   computed: {
     ...mapGetters({
       contact: 'onGetContactUserList',
+      anonymity: 'onGetAnonymityUserList', // 新增匿名的getter
       group: 'onGetGroupUserList',
       chatroom: 'onGetChatroomUserList',
       msgList: 'onGetCurrentChatObjMsg'
@@ -73,6 +75,12 @@ export default {
     userList() {
       return {
         contact: this.contact.filter(item => {
+          if (item && !this.blackList.includes(item.name)) {
+            return item
+          }
+        }),
+        // 添加匿名项
+        anonymity: this.anonymity.filter(item => {
           if (item && !this.blackList.includes(item.name)) {
             return item
           }
@@ -101,6 +109,11 @@ export default {
       this.onGetGroupUserList()
     } else if (this.type === 'chatroom') {
       this.onGetChatroomUserList()
+    } else if (this.type === 'anonymity') {
+      setTimeout(() => {
+        this.onGetFirendBlack() // 暂时使用好友逻辑中的黑名单
+        this.onGetAnonymityUserList()
+      }, 100)
     }
   },
   mounted() {
@@ -114,6 +127,7 @@ export default {
   methods: {
     ...mapActions([
       'onGetContactUserList',
+      'onGetAnonymityUserList', // 新增匿名人员列表
       'onGetGroupUserList',
       'onGetChatroomUserList',
       'onGetCurrentChatObjMsg',
@@ -147,6 +161,10 @@ export default {
         case 'chatroom':
           key = item.id
           break
+        // 暂时使用好友聊天的逻辑
+        case 'anonymity':
+          key = item.name
+          break
         default:
           break
       }
@@ -157,6 +175,8 @@ export default {
       const chatList = this.chatList[name]
       let userId = ''
       if (name === 'contact') {
+        userId = item.name
+      } else if (name === 'anonymity') { // 暂时使用好友逻辑
         userId = item.name
       } else if (name === 'group') {
         userId = item.groupid
@@ -195,6 +215,8 @@ export default {
       } else if (this.type === 'chatroom') {
         name = this.$data.activedKey[this.type].id
         isGroup = true
+      } else if (this.type === 'anonymity') { // 暂时使用好友逻辑
+        name = this.$data.activedKey[this.type].name
       }
       this.getHistoryMessage({
         name,
@@ -312,6 +334,8 @@ export default {
       let userId = ''
       if (name === 'contact') {
         userId = item.name
+      } else if (name === 'anonymity') { // 暂时使用好友逻辑
+        userId = item.name
       } else if (name === 'group') {
         userId = item.groupid
       } else {
@@ -357,6 +381,8 @@ export default {
         name = this.$data.activedKey[this.type].groupid
       } else if (this.type === 'chatroom') {
         name = this.$data.activedKey[this.type].id
+      } else if (this.type === 'anonymity') { // 暂时使用好友逻辑
+        name = this.$data.activedKey[this.type].name
       }
       this.recallMessage({
         to: name,

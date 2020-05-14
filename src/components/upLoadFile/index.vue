@@ -11,7 +11,7 @@ import WebIM from '../../utils/WebIM'
 import { mapActions } from 'vuex'
 export default {
   props: [
-    'type', // 聊天类型 contact, group, chatroom
+    'type', // 聊天类型 contact, group, chatroom, anonymity
     'chatId' // 选中的聊天对象
   ],
   data() {

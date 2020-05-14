@@ -60,7 +60,7 @@
           <!-- 信息提示 -->
           <div v-if="getUnread('contact').contact" class="tip-style">&nbsp;</div>
         </a-menu-item>
-        <a-menu-item key="group">
+        <!-- <a-menu-item key="group">
           <a-icon type="team" class="navMenu-icon" />
           <span class="navMenu-text">群组</span>
           <div v-if="getUnread('group').group" class="tip-style">&nbsp;</div>
@@ -68,6 +68,12 @@
         <a-menu-item key="chatroom">
           <a-icon type="usergroup-add" class="navMenu-icon" />
           <span class="navMenu-text">聊天室</span>
+        </a-menu-item> -->
+        <a-menu-item key="anonymity">
+          <a-icon type="usergroup-add" class="navMenu-icon" />
+          <span class="navMenu-text">匿名</span>
+          <!-- 信息提示 -->
+          <div v-if="getUnread('anonymity').anonymity" class="tip-style">&nbsp;</div>
         </a-menu-item>
       </a-menu>
     </a-layout-header>
@@ -225,6 +231,10 @@ export default {
         case 'chatroom':
           this.$refs.messageBox.onGetChatroomUserList()
           break
+          // 新增匿名的逻辑
+        case 'anonymity':
+          this.$refs.messageBox.onGetAnonymityUserList()
+          break
         default:
           break
       }
@@ -256,7 +266,8 @@ export default {
       const chatList = this.chatList[type]
       const obj = {
         contact: false,
-        group: false
+        group: false,
+        anonymity: false // 新增匿名聊天选项
       }
       if (JSON.stringify(chatList) !== '{}') {
         for (const item in chatList) {
@@ -268,6 +279,10 @@ export default {
               if (v.chatType === 'contact') {
                 obj.contact = true
               }
+              // 新增匿名未读提示
+              if (v.chatType === 'anonymity') {
+                obj.anonymity = true
+              }
             }
             return obj
           })
@@ -275,7 +290,8 @@ export default {
       }
       return {
         contact: obj.contact,
-        group: obj.group
+        group: obj.group,
+        anonymity: obj.anonymity // 新增匿名未读提示
       }
     }
   }

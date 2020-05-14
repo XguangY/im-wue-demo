@@ -26,12 +26,14 @@ const Chat = {
     userList: {
       contactUserList: [],
       groupUserList: [],
-      chatroomUserList: []
+      chatroomUserList: [],
+      anonymityUserList: [] // 添加匿名聊天项
     },
     msgList: {
       contact: {},
       group: {},
-      chatroom: {}
+      chatroom: {},
+      anonymity: {} // 新增匿名聊天项目
     },
     currentMsgs: []
   },
@@ -173,6 +175,24 @@ const Chat = {
         console.log('error', e)
       }
     },
+    // 新增匿名的action 暂时使用好友的逻辑
+    onGetAnonymityUserList: function(context, payload) {
+      try {
+        WebIM.conn.getRoster({
+          success: function(roster) {
+            // console.log("roster", roster);
+            const userList = roster.filter(user => ['both', 'to'].includes(user.subscription))
+            context.commit('updateUserList', {
+              userList,
+              type: 'anonymityUserList',
+              black: payload
+            })
+          }
+        })
+      } catch (e) {
+        console.log('error', e)
+      }
+    },
     onGetGroupUserList: function(context, payload) {
       var options = {
         success: function(resp) {
@@ -209,6 +229,8 @@ const Chat = {
     // 获取当前聊天对象的记录 @payload： {key, type}
     onGetCurrentChatObjMsg: function(context, payload) {
       const { id, type } = payload
+      console.log(8888888, payload)
+      console.log(99999999999, context.state.msgList)
       context.commit('updateCurrentMsgList', context.state.msgList[type][id])
     },
     onSendText: function(context, payload) {
@@ -220,7 +242,8 @@ const Chat = {
       const jid = {
         contact: 'name',
         group: 'groupid',
-        chatroom: 'id'
+        chatroom: 'id',
+        anonymity: 'name' // 增加匿名聊天选项，暂时使用好友逻辑
       }
       const msgObj = new WebIM.message('txt', id)
       msgObj.set({
@@ -545,6 +568,9 @@ const Chat = {
   getters: {
     onGetContactUserList(state) {
       return state.userList.contactUserList
+    },
+    onGetAnonymityUserList(state) { // 新增匿名的getter 暂时使用好友的逻辑
+      return state.userList.anonymityUserList
     },
     onGetGroupUserList(state) {
       return state.userList.groupUserList

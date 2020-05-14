@@ -55,6 +55,16 @@ export default new Router({
       path: '/chatroom',
       name: 'chatroom',
       component: Contact
+    },
+    {
+      path: '/anonymity/:id',
+      name: 'anonymity',
+      component: Contact
+    },
+    {
+      path: '/anonymity',
+      name: 'anonymity',
+      component: Contact
     }
   ]
 })
