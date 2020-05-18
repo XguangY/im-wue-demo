@@ -160,7 +160,33 @@ const Chat = {
       try {
         WebIM.conn.getRoster({
           success: function(roster) {
-            // console.log("roster", roster);
+            const LS = JSON.parse(localStorage.getItem('userInfo')).userId
+            const imUserId = Vue.$route.params.id
+            const routeName = Vue.$route.name === 'contact'
+            if (imUserId && routeName) {
+              let imUserBL = false
+              const existUser = () => {
+                roster.forEach(item => {
+                  if (item.name === imUserId) {
+                    imUserBL = true
+                  }
+                })
+                return imUserBL
+              }
+              if (!existUser()) {
+                const newFriend = {
+                  name: Vue.$route.params.id,
+                  subscription: 'both',
+                  jid: {
+                    appKey: WebIM.config.appkey,
+                    name: LS,
+                    domain: WebIM.config.Host,
+                    clientResource: 'webim_' + new Date().getTime()
+                  }
+                }
+                roster.push(newFriend)
+              }
+            }
             const userList = roster.filter(user => ['both', 'to'].includes(user.subscription))
             context.commit('updateUserList', {
               userList,

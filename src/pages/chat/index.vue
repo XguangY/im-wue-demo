@@ -174,10 +174,28 @@ export default {
       return this.$store.state.chat.msgList
     }
   },
+  mounted() {
+    this.submitAddFirend()
+  },
   methods: {
-    ...mapActions(['onLogout', 'onGetFirendBlack']),
+    ...mapActions(['onLogout', 'onGetFirendBlack', 'addfirend']),
     toLogout() {
       this.onLogout()
+    },
+    // 添加好友
+    submitAddFirend() {
+      const LS = JSON.parse(localStorage.getItem('userInfo')).userId
+      const params = this.$route.query.username
+      const id = this.$route.params.id
+      if (params && params === LS) {
+        const option = {
+          id,
+          params
+        }
+        setTimeout(() => {
+          this.addfirend(option)
+        }, 500)
+      }
     },
     onCollapse(collapsed, type) {
       if (type !== 'responsive') {

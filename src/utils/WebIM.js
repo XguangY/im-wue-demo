@@ -41,7 +41,7 @@ WebIM.conn.listen({
     // 登录或注册成功后 跳转到好友页面
     const username = Vue.$store.state.login.username || localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).userId
     const path = location.pathname.indexOf('login') !== -1 || location.pathname.indexOf('register') !== -1 ? '/contact' : location.pathname
-    const redirectUrl = `${path}?username=${username}`
+    const redirectUrl = `${path}`
     Vue.$router.push({ path: redirectUrl })
   },
   onClosed: function(message) {
@@ -192,11 +192,15 @@ WebIM.conn.listen({
     const select_id = Vue.$store.state.group.groupInfo.gid // 群组相关操作，更新数据时需要
     switch (message.type) {
       case 'subscribe':
-        const options = {
-          isShow: true,
-          ...message
-        }
-        Vue.$store.commit('changeFriendRequestState', options)
+        // const options = {
+        //   isShow: true,
+        //   ...message
+        // }
+        // Vue.$store.commit('changeFriendRequestState', options)
+        WebIM.conn.subscribed({
+          to: message.from,
+          message: '[resp:true]'
+        })
         break
       case 'subscribed':
         Vue.$store.dispatch('onGetContactUserList')
