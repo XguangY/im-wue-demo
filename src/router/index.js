@@ -7,52 +7,53 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  // base: '/webim/',
   routes: [
     {
-      path: '',
-      redirect: '/login'
+      path: '/webim',
+      redirect: '/webim/contact'
     },
     {
-      path: '/',
-      redirect: '/login'
+      path: '/webim/',
+      redirect: '/webim/contact'
     },
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: Login
+    // },
+    // {
+    //   path: '/register',
+    //   name: 'login',
+    //   component: Login
+    // },
     {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/register',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/contact/:id',
+      path: '/webim/contact/:id',
       name: 'contact',
       component: Contact
     },
     {
-      path: '/contact',
+      path: '/webim/contact',
       name: 'contact',
       component: Contact
     },
     {
-      path: '/group/:id',
+      path: '/webim/group/:id',
       name: 'group',
       component: Contact
     },
     {
-      path: '/group',
+      path: '/webim/group',
       name: 'group',
       component: Contact
     },
     {
-      path: '/chatroom/:id',
+      path: '/webim/chatroom/:id',
       name: 'chatroom',
       component: Contact
     },
     {
-      path: '/chatroom',
+      path: '/webim/chatroom',
       name: 'chatroom',
       component: Contact
     }

@@ -56,7 +56,7 @@
       >
         <a-menu-item key="contact">
           <a-icon type="user" class="navMenu-icon" />
-          <span class="navMenu-text">通讯录</span>
+          <span class="navMenu-text">在线沟通</span>
           <!-- 信息提示 -->
           <div v-if="getUnread('contact').contact" class="tip-style">&nbsp;</div>
         </a-menu-item>
