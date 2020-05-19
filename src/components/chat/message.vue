@@ -5,7 +5,7 @@
       <div>
         <a-icon v-show="broken" type="left" class="user-goback" @click="showUserList" />
         <span>{{ `${activedKey[type].name } &nbsp;&nbsp; ${activedKey[type].groupid || ''}` }}</span>
-        <a-icon v-if="type=='group'" type="ellipsis" class="user-ellipsis" @click="changeMenus" />
+        <!-- <a-icon v-if="type=='group'" type="ellipsis" class="user-ellipsis" @click="changeMenus" />
         <a-dropdown v-else-if="type=='contact'">
           <a class="ant-dropdown-link user-ellipsis" href="#" @click="changeMenus">
             <a-icon type="ellipsis" />
@@ -18,7 +18,7 @@
               <a href="javascript:;">删除好友</a>
             </a-menu-item>
           </a-menu>
-        </a-dropdown>
+        </a-dropdown> -->
       </div>
     </div>
 
@@ -302,7 +302,7 @@ export default {
           this.getHistoryMessage({ name: key.groupid, isGroup: true })
         }
       } else if (this.type === 'contact') {
-        this.$router.push({ name: this.type, params: { id: key.name }})
+        this.$router.push({ name: this.type, params: { id: key.name }, query: { username: this.$route.query.username }})
         this.onGetCurrentChatObjMsg({ type: this.type, id: key.name })
         setTimeout(() => {
           me.$store.commit('updateMessageStatus', {

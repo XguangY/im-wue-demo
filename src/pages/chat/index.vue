@@ -6,7 +6,7 @@
 	height: 100%;"
   >
     <a-layout-header class="layout-header">
-      <div class="header">
+      <!-- <div class="header">
         <span class="setting">
           <a-dropdown>
             <span class="ant-dropdown-link" href="#">
@@ -45,7 +45,7 @@
             </a-menu>
           </a-dropdown>
         </span>
-      </div>
+      </div> -->
 
       <a-menu
         v-model="current"
@@ -56,11 +56,11 @@
       >
         <a-menu-item key="contact">
           <a-icon type="user" class="navMenu-icon" />
-          <span class="navMenu-text">好友</span>
+          <span class="navMenu-text">通讯录</span>
           <!-- 信息提示 -->
           <div v-if="getUnread('contact').contact" class="tip-style">&nbsp;</div>
         </a-menu-item>
-        <a-menu-item key="group">
+        <!-- <a-menu-item key="group">
           <a-icon type="team" class="navMenu-icon" />
           <span class="navMenu-text">群组</span>
           <div v-if="getUnread('group').group" class="tip-style">&nbsp;</div>
@@ -68,7 +68,7 @@
         <a-menu-item key="chatroom">
           <a-icon type="usergroup-add" class="navMenu-icon" />
           <span class="navMenu-text">聊天室</span>
-        </a-menu-item>
+        </a-menu-item> -->
       </a-menu>
     </a-layout-header>
 
@@ -227,26 +227,26 @@ export default {
       this.$data.showSettingOptions = !this.$data.showSettingOptions
     },
     contactTypeChange(type) {
-      this.$data.activeKey = type.key
-      this.$router.push(`/${type.key}`)
-      if (this.broken && this.collapsed) {
-        this.$data.collapsed = false
-      }
+      // this.$data.activeKey = type.key
+      // this.$router.push(`/${type.key}`)
+      // if (this.broken && this.collapsed) {
+      //   this.$data.collapsed = false
+      // }
 
-      switch (type.key) {
-        case 'contact':
-          this.$refs.messageBox.onGetContactUserList()
-          break
-        case 'group':
-          this.$refs.messageBox.onGetGroupUserList()
-          break
-        case 'chatroom':
-          this.$refs.messageBox.onGetChatroomUserList()
-          break
-        default:
-          break
-      }
-      this.$refs.messageList.getCurrentMsg(type.key)
+      // switch (type.key) {
+      //   case 'contact':
+      //     this.$refs.messageBox.onGetContactUserList()
+      //     break
+      //   case 'group':
+      //     this.$refs.messageBox.onGetGroupUserList()
+      //     break
+      //   case 'chatroom':
+      //     this.$refs.messageBox.onGetChatroomUserList()
+      //     break
+      //   default:
+      //     break
+      // }
+      // this.$refs.messageList.getCurrentMsg(type.key)
     },
     addModalChange() {
       this.$data.showAddOptions = !this.$data.showAddOptions

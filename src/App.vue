@@ -6,14 +6,14 @@
 
 <script>
 import WebIM from './utils/WebIM'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'App',
   beforeMount() {
     const userInfo =
       localStorage.getItem('userInfo') &&
       JSON.parse(localStorage.getItem('userInfo'))
-    if (userInfo) {
+    if (userInfo && userInfo.userId === this.$route.query.username) {
       const userName = userInfo.userId
       const password = userInfo.password
       var options = {
@@ -23,7 +23,19 @@ export default {
         appKey: WebIM.config.appkey
       }
       WebIM.conn.open(options)
+    } else {
+      const userInfoQueryName = this.$route.query.username
+      const userInfoQueryPass = this.$route.query.password
+      if (userInfoQueryName && userInfoQueryPass) {
+        this.onLogin({
+          username: userInfoQueryName.toLowerCase(),
+          password: userInfoQueryPass
+        })
+      }
     }
+  },
+  methods: {
+    ...mapActions(['onLogin'])
   }
 }
 </script>

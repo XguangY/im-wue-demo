@@ -41,7 +41,7 @@ WebIM.conn.listen({
     // 登录或注册成功后 跳转到好友页面
     const username = Vue.$store.state.login.username || localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).userId
     const path = location.pathname.indexOf('login') !== -1 || location.pathname.indexOf('register') !== -1 ? '/contact' : location.pathname
-    const redirectUrl = `${path}`
+    const redirectUrl = `${path}?username=${username}`
     Vue.$router.push({ path: redirectUrl })
   },
   onClosed: function(message) {
@@ -204,10 +204,10 @@ WebIM.conn.listen({
         break
       case 'subscribed':
         Vue.$store.dispatch('onGetContactUserList')
-        Message({
-          type: 'success',
-          message: message.from + ' ' + '已订阅'
-        })
+        // Message({
+        //   type: 'success',
+        //   message: message.from + ' ' + '已订阅'
+        // })
         break
       case 'unsubscribed':
         Vue.$store.dispatch('onGetContactUserList')
@@ -215,19 +215,19 @@ WebIM.conn.listen({
         if ('code' in message) {
           alert(message.from + ' ' + '请求被拒绝')
         } else {
-          Message({
-            type: 'success',
-            message: message.from + ' ' + '已退订'
-          })
+          // Message({
+          //   type: 'success',
+          //   message: message.from + ' ' + '已退订'
+          // })
         }
         break
 
       case 'direct_joined': // 被拉进群--不需要同意
         Vue.$store.dispatch('onGetGroupUserList')
-        Message({
-          type: 'success',
-          message: `${message.from}邀请您加入群：${message.gid}`
-        })
+        // Message({
+        //   type: 'success',
+        //   message: `${message.from}邀请您加入群：${message.gid}`
+        // })
         break
       case 'invite': // 收到邀请进群的通知
         const groupInviteOptions = {

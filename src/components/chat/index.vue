@@ -102,6 +102,11 @@ export default {
     } else if (this.type === 'chatroom') {
       this.onGetChatroomUserList()
     }
+    setTimeout(() => {
+      if (this.userList.contact.length > 0) {
+        this.select2(this.userList.contact[this.userList.contact.length - 1], this.$route.params.id)
+      }
+    }, 1000)
   },
   mounted() {
     // 取到黑名单列表值将黑名单匹配用户列表进行筛选
